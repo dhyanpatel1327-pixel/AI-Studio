@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Studio - Professional Image Gallery</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Animated Background -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-top">
+            <div class="logo">
+                <span class="logo-icon">🎨</span>
+                <div class="logo-text">
+                    <h1>AI Studio</h1>
+                    <p>Visual Discovery</p>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-wrapper">
+                <div class="search-input-group">
+                    <span class="search-icon">🔍</span>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search images..."
+                        autocomplete="off"
+                    />
+                </div>
+                <button id="searchBtn" class="search-submit">
+                    <span>Search</span>
+                </button>
+            </div>
+
+            <!-- Trending Tags -->
+            <div class="trending-tags">
+                <h4>Trending</h4>
+                <div class="tags-container">
+                    <button class="tag-btn" data-tag="nature">Nature</button>
+                    <button class="tag-btn" data-tag="architecture">Architecture</button>
+                    <button class="tag-btn" data-tag="technology">Technology</button>
+                    <button class="tag-btn" data-tag="minimal">Minimal</button>
+                    <button class="tag-btn" data-tag="street">Street</button>
+                    <button class="tag-btn" data-tag="abstract">Abstract</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Favorites Section -->
+        <div class="sidebar-section">
+            <div class="section-header">
+                <h3>❤️ Saved</h3>
+                <span class="badge" id="favoritesCount">0</span>
+            </div>
+            <div class="favorites-grid" id="favoritesList">
+                <p class="empty-state">Save images to your collection</p>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="sidebar-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalViewed">0</span>
+                    <span class="stat-label">Viewed</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalDownloads">0</span>
+                    <span class="stat-label">Downloaded</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-content">
+                <h2 id="pageTitle">Discover Images</h2>
+                <p id="pageSubtitle">Explore millions of stunning visuals</p>
+            </div>
+            <div class="header-controls">
+                <button class="sort-btn" id="sortBtn">
+                    <span>⬇️ Latest</span>
+                </button>
+                <button class="filter-btn" id="filterBtn">
+                    <span>⚙️ Filter</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Gallery Container -->
+        <div class="gallery-wrapper">
+            <div class="gallery" id="gallery">
+                <!-- Loading State -->
+                <div class="empty-state-full">
+                    <div class="loading-animation">
+                        <div class="blob blob-1"></div>
+                        <div class="blob blob-2"></div>
+                        <div class="blob blob-3"></div>
+                    </div>
+                    <p>Loading amazing images...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Load More Button -->
+        <div class="load-more-container">
+            <button id="loadMoreBtn" class="load-more-btn" style="display: none;">
+                <span class="btn-text">Load More</span>
+                <span class="btn-arrow">→</span>
+            </button>
+        </div>
+    </main>
+
+    <!-- Image Preview Modal -->
+    <div id="imageModal" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-container">
+            <button class="modal-close">&times;</button>
+            
+            <div class="modal-content">
+                <div class="modal-image-wrapper">
+                    <img id="modalImage" src="" alt="" class="modal-image">
+                    <div class="image-overlay">
+                        <button id="modalDownloadBtn" class="overlay-btn download-btn">
+                            <span>⬇️ Download</span>
+                        </button>
+                        <button id="modalFavoriteBtn" class="overlay-btn favorite-btn">
+                            <span>❤️ Save</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-info">
+                    <div class="info-section">
+                        <h3 id="modalTitle">Image Title</h3>
+                        <p id="modalDescription" class="description">Image details</p>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>Details</h4>
+                        <div class="details-grid">
+                            <div class="detail-item">
+                                <span class="detail-label">Photographer</span>
+                                <span id="modalPhotographer" class="detail-value">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Dimensions</span>
+                                <span id="modalDimensions" class="detail-value">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Downloads</span>
+                                <span id="modalDownloads" class="detail-value">-</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Likes</span>
+                                <span id="modalLikes" class="detail-value">-</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-section">
+                        <h4>Tags</h4>
+                        <div class="modal-tags" id="modalTags">
+                            <span class="tag">Photography</span>
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <a id="modalViewProfile" href="#" target="_blank" class="action-btn primary">
+                            View Photographer
+                        </a>
+                        <button id="modalShareBtn" class="action-btn secondary">
+                            Share Image
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
